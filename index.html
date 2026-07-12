@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OrbitCV — Ton CV en orbite autour du monde</title>
+<meta name="description" content="Colle ton parcours, choisis le pays : l'IA réécrit ton CV dans la langue et les codes locaux. Un prix, zéro abonnement.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--blue:#2547F4;--ink:#171A21;--bg:#EEF0F4;--line:#DDE1E9;--gray:#565B66;--soft:#8A8F9B}
+*{box-sizing:border-box;margin:0}
+body{font-family:Inter,sans-serif;background:var(--bg);color:var(--ink)}
+.wrap{max-width:1000px;margin:0 auto;padding:0 20px}
+h1,h2,.d{font-family:Sora,sans-serif}
+header{padding:32px 0 16px}
+.brand{display:flex;align-items:center;gap:10px}
+.logo{position:relative;width:38px;height:38px;border-radius:50%;background:var(--blue);display:flex;align-items:center;justify-content:center;color:#fff;font-family:Sora;font-weight:800;font-size:11px}
+.logo::after{content:"";position:absolute;width:8px;height:8px;border-radius:50%;background:var(--ink);top:-5px;right:-3px}
+.brand b{font-size:19px}.brand b span{color:var(--blue)}
+h1{font-size:clamp(28px,6vw,40px);font-weight:800;letter-spacing:-.5px;line-height:1.12;margin-top:20px}
+h1 span{color:var(--blue)}
+.sub{color:var(--gray);font-size:14px;margin-top:8px}
+.price{background:var(--ink);color:#fff;border-radius:16px;padding:12px 16px;font-size:14px;display:flex;flex-wrap:wrap;gap:6px 18px;margin:18px 0}
+.price b{font-family:Sora}
+.grid{display:grid;gap:22px;padding-bottom:70px}
+@media(min-width:900px){.grid{grid-template-columns:1fr 1fr}}
+.card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px}
+label{display:block;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--blue);margin:16px 0 6px}
+label:first-child{margin-top:0}
+label small{color:var(--soft);text-transform:none;letter-spacing:0;font-weight:400}
+input,textarea{width:100%;border:1px solid #C9CDD8;border-radius:10px;padding:10px 12px;font:inherit;font-size:14px;color:var(--ink);resize:none}
+input:focus,textarea:focus{outline:2px solid var(--blue);border-color:var(--blue)}
+.flags{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.flag{border:1px solid var(--line);border-radius:10px;background:#fff;padding:8px 2px;text-align:center;cursor:pointer;font:inherit}
+.flag div{font-size:19px}.flag small{font-size:10px;font-weight:500;display:block;margin-top:3px}
+.flag.on{border-color:var(--blue);background:#EDF1FF}
+.hint{font-size:11px;color:var(--soft);margin-top:5px}
+.go{width:100%;margin-top:18px;border:0;border-radius:14px;padding:15px;background:var(--blue);color:#fff;font-family:Sora;font-weight:700;font-size:14px;cursor:pointer}
+.go:disabled{opacity:.4;cursor:default}
+.up{width:100%;border:2px dashed var(--blue);background:#EDF1FF;color:var(--blue);border-radius:10px;padding:11px;font:inherit;font-size:13px;font-weight:600;cursor:pointer;margin-bottom:8px}
+.err{margin-top:12px;background:#FDEDEC;color:#B3261E;border-radius:10px;padding:10px 12px;font-size:13px;display:none}
+.empty{border:2px dashed #C9CDD8;border-radius:18px;min-height:260px;display:flex;align-items:center;justify-content:center;text-align:center;color:var(--soft);font-size:14px;font-weight:500;padding:30px}
+.spin{width:38px;height:38px;border:4px solid var(--blue);border-top-color:transparent;border-radius:50%;margin:0 auto 12px;animation:r 1s linear infinite}
+@keyframes r{to{transform:rotate(360deg)}}
+.acts{display:flex;gap:8px;margin-bottom:12px}
+.acts button{flex:1;border-radius:12px;padding:11px;font-family:Sora;font-weight:700;font-size:13px;cursor:pointer}
+.dl{background:var(--ink);color:#fff;border:0}
+.cp{background:#fff;color:var(--ink);border:2px solid var(--ink)}
+.paper{background:#fff;border-radius:4px;box-shadow:0 8px 30px rgba(23,26,33,.15);padding:28px}
+.paper h2{font-size:23px;font-weight:800;letter-spacing:-.4px}
+.role{color:var(--blue);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;margin-top:2px}
+.pitch{font-style:italic;font-size:14px;color:#3A3F4A;border-left:3px solid var(--blue);padding-left:12px;margin-top:12px}
+.st{font-family:Sora;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.2em;color:var(--blue);border-bottom:1px solid var(--line);padding-bottom:4px;margin:20px 0 8px}
+.chips span{display:inline-block;border:1px solid #C9CDD8;border-radius:20px;padding:3px 10px;margin:0 5px 5px 0;font-size:12px}
+.xp{margin-bottom:12px}.xp b{font-size:14px}.meta{font-size:12px;color:var(--soft)}
+ul{padding-left:18px;margin-top:4px}li{font-size:14px;color:#3A3F4A;margin-bottom:2px}
+.redo{width:100%;background:none;border:0;color:var(--blue);font-weight:600;font-size:13px;padding:12px;cursor:pointer;margin-top:8px}
+.hide{display:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="brand"><div class="logo">CV</div><b class="d">Orbit<span>CV</span></b></div>
+  <h1>Ton CV, mis en orbite<br><span>autour du monde. 🛰️</span></h1>
+  <p class="sub">Colle ton parcours → choisis le pays → l'IA le réécrit dans la langue et les codes locaux.</p>
+  <div class="price"><b>💶 Prix affiché AVANT, pas après :</b><span><b>4,99</b> = 1 CV</span><span><b>14,99/mois</b> = illimité (1 CV par entreprise visée)</span><span style="opacity:.8">Annulable en 1 clic · Zéro piège</span></div>
+</header>
+
+<main class="grid">
+<section class="card">
+  <label>1 · Marché cible</label>
+  <div class="flags" id="flags"></div>
+  <p class="hint" id="hint"></p>
+  <label>2 · Le job visé</label>
+  <input id="job" placeholder="Ex : Product Manager, Développeur web, Sales B2B…">
+  <label>2b · Entreprise(s) visée(s) <small>(optionnel — le CV s'adapte à leur culture)</small></label>
+  <input id="entreprise" placeholder="Ex : Google, Airbus, une startup fintech…">
+  <label>3 · L'offre d'emploi <small>(optionnel — colle-la, ciblage max)</small></label>
+  <textarea id="offre" rows="3" placeholder="Colle le texte de l'annonce ici…"></textarea>
+  <label>4 · Ton parcours <small>(importe ton ancien CV ou écris en vrac)</small></label>
+  <button type="button" class="up" id="upBtn" onclick="document.getElementById('file').click()">📎 Importer mon ancien CV (PDF, Word, TXT)</button>
+  <input type="file" id="file" accept=".pdf,.docx,.txt" style="display:none" onchange="importCV(event)">
+  <textarea id="parcours" rows="8" placeholder="Écris librement : nom, jobs, dates, ce que tu faisais, études, langues… L'IA traduit et adapte tout au pays cible."></textarea>
+  <button class="go" id="go" disabled>✨ Générer mon CV</button>
+  <div class="err" id="err">Génération interrompue. Réessaie — souvent ça passe au 2e coup.</div>
+</section>
+
+<section>
+  <div class="empty" id="empty"><div><div style="font-size:34px" id="emptyFlag">🇫🇷</div><p>Ton CV optimisé apparaîtra ici,<br>prêt à télécharger.</p></div></div>
+  <div class="empty hide" id="load"><div><div class="spin"></div><p id="loadTxt">Adaptation en cours…</p></div></div>
+  <div class="hide" id="result">
+    <div class="acts">
+      <button class="dl" onclick="dl()">⬇️ Télécharger</button>
+      <button class="cp" id="cpBtn" onclick="cp()">📋 Copier</button>
+    </div>
+    <div class="paper" id="paper"></div>
+    <button class="redo" onclick="generer()">🔄 Régénérer une autre version</button>
+  </div>
+</section>
+</main>
+</div>
+
+<script>
+const PAYS=[
+{id:"fr",flag:"🇫🇷",label:"France",langue:"français",regles:"Format français : sobre, 1 page si possible, rubriques classiques."},
+{id:"us",flag:"🇺🇸",label:"USA / Canada",langue:"anglais américain",regles:"US resume rules: NO photo, NO age, NO marital status, strong action verbs, quantified achievements, 1 page."},
+{id:"uk",flag:"🇬🇧",label:"Royaume-Uni",langue:"anglais britannique",regles:"UK CV: no photo, no age, professional tone, 2 pages max, personal statement at top."},
+{id:"de",flag:"🇩🇪",label:"Allemagne",langue:"allemand",regles:"Deutscher Lebenslauf: strukturiert, präzise, tabellarisch."},
+{id:"es",flag:"🇪🇸",label:"Espagne/LatAm",langue:"espagnol",regles:"CV español: claro, directo, logros cuantificados."},
+{id:"pt",flag:"🇧🇷",label:"Brésil/Portugal",langue:"portugais",regles:"Currículo: objetivo claro, resultados quantificados."},
+{id:"ae",flag:"🇦🇪",label:"Golfe/MENA",langue:"anglais",regles:"Gulf-style CV: nationality/visa status often expected, achievements-focused."},
+{id:"int",flag:"🌍",label:"International",langue:"anglais",regles:"International standard: English, no photo, achievement-driven, ATS-friendly."}];
+let pays=PAYS[0],cv=null;
+const $=id=>document.getElementById(id);
+function renderFlags(){$("flags").innerHTML=PAYS.map(p=>`<button class="flag ${p.id===pays.id?'on':''}" onclick="setPays('${p.id}')"><div>${p.flag}</div><small>${p.label}</small></button>`).join("");
+$("hint").textContent=`CV généré en ${pays.langue}, codes ${pays.label}.`;$("emptyFlag").textContent=pays.flag;}
+function setPays(id){pays=PAYS.find(p=>p.id===id);renderFlags();}
+function check(){$("go").disabled=!($("job").value.trim().length>2&&$("parcours").value.trim().length>30);}
+["job","parcours"].forEach(id=>$(id).addEventListener("input",check));
+renderFlags();
+
+function loadScript(src){return new Promise((ok,ko)=>{const s=document.createElement("script");s.src=src;s.onload=ok;s.onerror=ko;document.head.appendChild(s);});}
+async function importCV(ev){
+const f=ev.target.files[0];if(!f)return;
+$("upBtn").textContent="⏳ Lecture de ton CV…";
+try{
+let txt="";const n=f.name.toLowerCase();
+if(n.endsWith(".pdf")){
+if(!window.pdfjsLib){await loadScript("https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js");pdfjsLib.GlobalWorkerOptions.workerSrc="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";}
+const buf=await f.arrayBuffer();const pdf=await pdfjsLib.getDocument({data:buf}).promise;
+for(let i=1;i<=pdf.numPages;i++){const p=await pdf.getPage(i);const c=await p.getTextContent();txt+=c.items.map(it=>it.str).join(" ")+"\n";}
+}else if(n.endsWith(".docx")){
+if(!window.mammoth)await loadScript("https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js");
+const buf=await f.arrayBuffer();const r=await mammoth.extractRawText({arrayBuffer:buf});txt=r.value;
+}else{txt=await f.text();}
+txt=txt.trim().slice(0,8000);
+if(txt.length<30)throw new Error("vide");
+$("parcours").value=txt;check();
+$("upBtn").textContent="✅ CV importé — vérifie le texte ci-dessous";
+}catch(e){$("upBtn").textContent="❌ Lecture impossible — colle le texte à la main";}
+ev.target.value="";
+}
+
+async function generer(){
+$("err").style.display="none";$("empty").classList.add("hide");$("result").classList.add("hide");
+$("load").classList.remove("hide");$("loadTxt").textContent=`Traduction + adaptation aux codes ${pays.label}…`;
+const prompt=`Tu es un expert international en recrutement et rédaction de CV.
+Marché cible : ${pays.label}. Langue du CV : ${pays.langue}. Règles locales : ${pays.regles}
+Poste visé : ${$("job").value}
+${$("entreprise").value.trim()?`Entreprise(s) visée(s) : ${$("entreprise").value} — adapte le ton, le vocabulaire et les mots-clés à la culture et au secteur de cette entreprise.`:""}
+${$("offre").value.trim()?`Extrait de l'offre : ${$("offre").value}`:""}
+Parcours brut du candidat :
+${$("parcours").value}
+
+Réécris ce parcours en ${pays.langue}, adapté aux codes du marché ${pays.label}, pour MAXIMISER les chances d'entretien : verbes d'action, résultats chiffrés (estime raisonnablement si absent), mots-clés du domaine et de l'offre, expériences pertinentes en premier. Compatible ATS.
+Réponds UNIQUEMENT avec un JSON valide, sans markdown, format exact (valeurs en ${pays.langue}) :
+{"nom":"...","titre":"...","accroche":"2 phrases max","competences":["6-8 items"],"experiences":[{"poste":"...","entreprise":"...","periode":"...","points":["2-3 points"]}],"formation":[{"diplome":"...","ecole":"...","annee":"..."}],"atouts":["3 items"]}
+Sois concis. Si le nom est absent, mets un placeholder.`;
+try{
+const r=await fetch("/api/generate",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({prompt})});
+const data=await r.json();
+const text=(data.content||[]).filter(b=>b.type==="text").map(b=>b.text).join("\n");
+const clean=text.replace(/```json|```/g,"").trim();
+cv=JSON.parse(clean.slice(clean.indexOf("{"),clean.lastIndexOf("}")+1));
+renderCV();
+}catch(e){$("load").classList.add("hide");$("empty").classList.remove("hide");$("err").style.display="block";}
+}
+$("go").addEventListener("click",generer);
+
+function esc(s){return String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
+function renderCV(){
+$("load").classList.add("hide");$("result").classList.remove("hide");
+$("paper").innerHTML=`
+<div style="display:flex;justify-content:space-between;align-items:flex-start">
+<div><h2 class="d">${esc(cv.nom)}</h2><div class="role">${esc(cv.titre)}</div></div>
+<span style="font-size:22px">${pays.flag}</span></div>
+<p class="pitch">${esc(cv.accroche)}</p>
+<div class="st">Skills</div><div class="chips">${(cv.competences||[]).map(c=>`<span>${esc(c)}</span>`).join("")}</div>
+<div class="st">Experience</div>${(cv.experiences||[]).map(e=>`<div class="xp"><b>${esc(e.poste)} — ${esc(e.entreprise)}</b><div class="meta">${esc(e.periode)}</div><ul>${(e.points||[]).map(p=>`<li>${esc(p)}</li>`).join("")}</ul></div>`).join("")}
+<div class="st">Education</div>${(cv.formation||[]).map(f=>`<div style="font-size:14px;margin-bottom:4px"><b>${esc(f.diplome)}</b> — ${esc(f.ecole)} <span class="meta">(${esc(f.annee)})</span></div>`).join("")}
+<div class="st">Strengths</div><ul>${(cv.atouts||[]).map(a=>`<li>${esc(a)}</li>`).join("")}</ul>`;
+window.scrollTo({top:$("result").offsetTop-20,behavior:"smooth"});
+}
+function cvText(){let t=`${cv.nom}\n${cv.titre}\n\n${cv.accroche}\n\n— SKILLS —\n${(cv.competences||[]).join(" · ")}\n\n— EXPERIENCE —\n`;
+(cv.experiences||[]).forEach(e=>{t+=`\n${e.poste} — ${e.entreprise} (${e.periode})\n`;(e.points||[]).forEach(p=>t+=`  • ${p}\n`);});
+t+=`\n— EDUCATION —\n`;(cv.formation||[]).forEach(f=>t+=`${f.diplome} — ${f.ecole} (${f.annee})\n`);
+t+=`\n— STRENGTHS —\n${(cv.atouts||[]).map(a=>"• "+a).join("\n")}`;return t;}
+function cp(){navigator.clipboard.writeText(cvText()).then(()=>{$("cpBtn").textContent="✅ Copié !";setTimeout(()=>$("cpBtn").textContent="📋 Copier",2000);});}
+function dl(){
+const h=`<!DOCTYPE html><html><head><meta charset="utf-8"><title>${esc(cv.nom)} — CV</title><style>@page{margin:18mm}body{font-family:Georgia,serif;color:#171A21;max-width:720px;margin:32px auto;padding:0 24px;line-height:1.45}h1{font-size:30px;margin:0}.t{color:#2547F4;font-weight:bold;font-size:15px;margin:2px 0 14px;text-transform:uppercase;letter-spacing:1px}.a{font-style:italic;border-left:3px solid #2547F4;padding-left:12px;margin:0 0 20px}h2{font-size:12px;text-transform:uppercase;letter-spacing:2px;color:#2547F4;border-bottom:1px solid #d9dce3;padding-bottom:4px;margin:22px 0 10px}.x{margin-bottom:12px}.p{font-weight:bold}.m{color:#666;font-size:13px}ul{margin:4px 0 0;padding-left:18px}li{margin-bottom:2px;font-size:14px}.c span{display:inline-block;border:1px solid #c9cdd8;border-radius:20px;padding:2px 10px;margin:0 6px 6px 0;font-size:13px}</style></head><body><h1>${esc(cv.nom)}</h1><div class="t">${esc(cv.titre)}</div><p class="a">${esc(cv.accroche)}</p><h2>Skills</h2><div class="c">${(cv.competences||[]).map(c=>`<span>${esc(c)}</span>`).join("")}</div><h2>Experience</h2>${(cv.experiences||[]).map(e=>`<div class="x"><div class="p">${esc(e.poste)} — ${esc(e.entreprise)}</div><div class="m">${esc(e.periode)}</div><ul>${(e.points||[]).map(p=>`<li>${esc(p)}</li>`).join("")}</ul></div>`).join("")}<h2>Education</h2>${(cv.formation||[]).map(f=>`<div class="x"><span class="p">${esc(f.diplome)}</span> — ${esc(f.ecole)} <span class="m">(${esc(f.annee)})</span></div>`).join("")}<h2>Strengths</h2><ul>${(cv.atouts||[]).map(a=>`<li>${esc(a)}</li>`).join("")}</ul></body></html>`;
+const b=new Blob([h],{type:"text/html"});const u=URL.createObjectURL(b);const a=document.createElement("a");a.href=u;a.download="CV-OrbitCV.html";a.click();URL.revokeObjectURL(u);}
+</script>
+</body>
+</html>
